@@ -1,0 +1,55 @@
+SELECT?COUNT(?1?)?AS?'注册量',?FROM_UNIXTIME(?SUBSTR(?`uid`?,?1,?10?)?,?'%Y-%m-%d'?)?AS?'时间'FROM?`user_info`?WHERE?gallery?=9OR?gallery?=10GROUP?BY?FROM_UNIXTIME(?SUBSTR(?`uid`?,?1,?10?)?,?'%Y%m%d'?)
+
+
+SELECT sum(a.`weight`),count(a.`id`),FROM_UNIXTIME(a.timeline,'%Y-%m-%d') 
+ from `order_pay` as a LEFT JOIN `user_info` as b on a.uid=b.uid 
+where a.pid=5 and (b.gallery=9 or b.gallery=10) GROUP BY ?FROM_UNIXTIME(a.timeline,'%Y%m%d') 
+
+
+
+SELECT b.`title` , FROM_UNIXTIME( a.`timeline` ,  '%Y-%m-%d' ) , COUNT( 1 ) 
+FROM  `offline_order` AS a
+LEFT JOIN  `xingmei` AS b ON a.source = b.id
+GROUP BY FROM_UNIXTIME( a.`timeline` ,  '%Y%m%d' ) , a.source
+
+
+SELECT b.`title` , FROM_UNIXTIME( a.`timeline` ,  '%Y-%m-%d' ) , COUNT( 1 ) 
+FROM  `offline_order` AS a
+LEFT JOIN  `xingmei` AS b ON a.source = b.id
+GROUP BY FROM_UNIXTIME( a.`timeline` ,  '%Y%m%d' ) , a.source
+
+
+
+
+/*
+* 2月至今的每天的交易额
+*/
+SELECT SUM(  `sum` ) , FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+FROM  `pay_temporary` 
+WHERE timeline >1454256000 and statustwo=2
+GROUP BY FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+
+
+/*
+* 2月至今的每天的交易笔数
+*/
+SELECT count(1) , FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+FROM  `pay_temporary` 
+WHERE timeline >1454256000 and statustwo=2
+GROUP BY FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+
+
+/*16年至今重复购买的人*/
+
+SELECT COUNT( 1 ) AS count, uid
+FROM  `order` 
+WHERE STATUS >1
+AND timeline >1451577600
+GROUP BY uid
+HAVING count >1
+
+
+
+
+
+

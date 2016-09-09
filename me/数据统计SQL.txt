@@ -1,0 +1,110 @@
+/*
+ * 2月起至今的每天的交易额
+ */
+SELECT SUM(  `sum` ) , FROM_UNIXTIME( timeline,  '%Y-%m-%d' ) 
+FROM  `pay_temporary` 
+WHERE timeline >1454256000 and statustwo=2
+GROUP BY FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+
+
+/*
+ * 2月至今的每天的交易笔数
+ */
+SELECT count(1) , FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+FROM  `pay_temporary` 
+WHERE timeline >1454256000 and statustwo=2
+GROUP BY FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+
+
+/*
+ * 2月至今的每天的交易克数
+ */
+SELECT SUM(  `weight` ) , FROM_UNIXTIME( timeline,  '%Y-%m-%d' ) 
+FROM  `pay_temporary` 
+WHERE timeline >1454256000 and statustwo=2
+GROUP BY FROM_UNIXTIME( timeline,  '%Y%m%d' ) 
+
+
+/*
+ * 至今的重复交易的人。次数（买金+设计师）
+ */
+SELECT COUNT(1) AS `c`, t.uid, b.`phone`, CONCAT(SUBSTRING(b.`phone`, 1, 3), '****', SUBSTRING(b.`phone`, -3, 3)) AS `p`
+FROM (
+SELECT uid
+FROM  `order` 
+WHERE `status` >1
+UNION ALL
+SELECT buyer_id AS `uid`
+FROM  `kv_order` 
+WHERE (`status`>1 AND `status`<5) OR `status`='8'
+) t
+LEFT JOIN `user_login` b ON t.uid=b.uid
+GROUP BY t.`uid`
+HAVING `c`>1
+ORDER BY `c` DESC
+
+/*
+ * 至今的重复交易的人。金额+次数（买金+设计师）
+ */
+SELECT SUM(`sum`), COUNT(1) AS `c`, t.uid, b.`phone`, CONCAT(SUBSTRING(b.`phone`, 1, 3), '****', SUBSTRING(b.`phone`, -3, 3)) AS `p`
+FROM (
+SELECT `sum`, `uid`
+FROM  `order` 
+WHERE `status` >1
+UNION ALL
+SELECT `goods_amount` AS `sum`, buyer_id AS `uid`
+FROM  `kv_order` 
+WHERE (`status`>1 AND `status`<5) OR `status`='8'
+) t
+LEFT JOIN `user_login` b ON t.uid=b.uid
+GROUP BY t.`uid`
+HAVING `c`>1
+ORDER BY `c` DESC
+
+
+/*
+ * 至今的重复交易的人。金额+次数（买金）
+ */
+SELECT COUNT(1) AS `c`, a.uid, b.`phone`, CONCAT(SUBSTRING(b.`phone`, 1, 3), '****', SUBSTRING(b.`phone`, -3, 3)) AS `p`
+FROM  `order` a 
+LEFT JOIN `user_login` b ON a.uid=b.uid
+WHERE a.`status` >1
+GROUP BY a.uid
+HAVING `c` >1
+ORDER BY `c` DESC
+
+
+/*
+ * 至今的所有买金的用户。金额+次数（买金）
+ */
+SELECT SUM(`sum`), COUNT(1) AS `c`, a.uid, b.`phone`, CONCAT(SUBSTRING(b.`phone`, 1, 3), '****', SUBSTRING(b.`phone`, -3, 3)) AS `p`
+FROM  `order` a 
+LEFT JOIN `user_login` b ON a.uid=b.uid
+WHERE a.`status` >1
+GROUP BY a.uid
+ORDER BY `c` DESC
+
+
+/*注册用户*/
+
+SELECT count(1) from `user_login` where SUBSTR(uid ,1 ,10)>1454256000
+
+
+/*
+交易金额
+*/
+
+SELECT sum(`sum`) from pay_temporary where timeline>1454256000 and statustwo=2
+
+/*重复购买买金包*/
+SELECT sum(c) from (
+SELECT count(1) as c from `order` where timeline>1454256000 and `status`>1  GROUP BY uid HAVING c>2)t
+
+/*重复购买*/
+SELECT sum(c) from (
+SELECT count(1) as c from `kv_order` where (`status`=2 or `status`=3 or `status`=4 OR `status`=8 OR `status`=6) and add_time>1454256000  GROUP BY buyer_id HAVING c>2)t
+
+
+
+
+

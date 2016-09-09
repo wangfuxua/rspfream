@@ -1,0 +1,11 @@
+-- SET GLOBAL event_scheduler=ON
+CREATE TRIGGER after_user_info after INSERT on `user_info` for EACH row 
+if(SELECT 1 from `user` where uid=new.uid) THEN
+update `user` set beans=beans+100 where uid=new.uid;
+INSERT INTO `maijin`.`beans_log` ( `rid`, `uid`, `type`, `act`, `tid`, `num`, `timeline`) VALUES 
+('1', new.uid, 'user', 'newreg', '0', '100', NOW());
+else
+INSERT into `user` (`uid`,`beans`,`timeline`) VALUES(new.uid,100,0);
+INSERT INTO `maijin`.`beans_log` ( `rid`, `uid`, `type`, `act`, `tid`, `num`, `timeline`) VALUES 
+('1', new.uid, 'user', 'newreg', '0', '100', NOW());
+end if;
