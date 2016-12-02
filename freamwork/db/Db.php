@@ -1,10 +1,11 @@
 <?php
-namespace db\Db;
+
  class Db{
+    public  $conn;
     /*
      * 构造方法
      * */
-    static function  __construct(){
+     function  __construct(){
 
     }
 /*
@@ -29,7 +30,7 @@ namespace db\Db;
     /*
      * 析构方法
      * */
-    static function __destruct(){
+     function __destruct(){
 
     }
 

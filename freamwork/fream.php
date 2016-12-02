@@ -1,15 +1,18 @@
 <?php
-namespace main;
+
 /*
  *       主函数
 */
-class fream{
-        static function  __construct(){
+ class fream{
+
+          public    function  __construct(){
             spl_autoload_register(array('Load','loadclass'));
         }
 
-    public function Load($clasname){
-        $file=$clasname.'.php';
+     static  public function Load($clasname){
+            $dir=strtolower($clasname);
+         $file=dirname(__FILE__).'/'.$dir.'/'.$clasname.'.php';
+
             if(is_file($file)){
                 include_once($file);
             }else{

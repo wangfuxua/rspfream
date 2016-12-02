@@ -21,8 +21,7 @@ class Restful {
               $this->url=$_SERVER['REDIRECT_URL'];
               $this->remethod=$_SERVER['REQUEST_METHOD'];
               $this->retime=$_SERVER['REQUEST_TIME'];
-                echo  $this->retime;
-                sleep(3);
+
             }
 
     /*
@@ -39,7 +38,7 @@ class Restful {
             function __destruct(){
                 $etime=time();//请求技术的时间
                 $seced=$etime-$this->retime;//请求所花费的时间
-                echo $seced;
+
             }
 
 
