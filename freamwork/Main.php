@@ -1,12 +1,13 @@
 <?php
 /**
  * Created by JetBrains PhpStorm.
- * User: Lee
+ * User: wangfuxu
  * Date: 16-12-2
  * Time: 下午2:50
  * To change this template use File | Settings | File Templates.
  */
 require_once('fream.php');
+require_once('Restful.php');
 class Main  extends fream{
         static $db;
     public    function  __construct(){
