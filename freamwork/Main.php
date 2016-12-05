@@ -8,7 +8,8 @@
  */
 require_once('fream.php');
 class Main  extends fream{
-        static $db;
+        static $Db;
+        static $url;
     public    function  __construct(){
         spl_autoload_register(array('Load','loadclass'));
     }
@@ -21,12 +22,12 @@ class Main  extends fream{
                 $data=require_once($conf);
              foreach($data as  $k=>$v){
                 parent::Load($k);
+                self::$$k=$k::init($v);
+
              }
 
             }else{
                 echo "config is error";exit;
             }
         }
-
-
 }

@@ -1,37 +1,35 @@
 <?php
 
  class Db{
-    public  $conn;
+     private static $conn;
     /*
      * 构造方法
      * */
-     function  __construct(){
-
+     private  function  __construct($dinfo){
+         self::$conn=mysql_connect($dinfo['host'],$dinfo['user'],$dinfo['pwd']) or die('链接失败');
+         mysql_select_db($dinfo['dbname'], self::$conn);
+         mysql_query('set names '.$dinfo['charset']);
     }
-/*
- * 获取一条数据
- * */
-    static public function Find(){
 
-    }
      /*
-      * 获取多条数据
+      * 禁止clone 方法
       * */
-        static public function FindAll(){
+    private function  __clone(){
 
         }
-     /*
-      * 执行一条sql语句
-      * */
-     static public function Execute(){
-
+     public static  function init($dinfo){
+         if(self::$conn instanceof self){
+             self::$conn=new self($dinfo);
+         }
+         return self::$conn;
      }
+
 
     /*
      * 析构方法
      * */
      function __destruct(){
-
+//        mysql_destory(self::$conn);
     }
 
 
